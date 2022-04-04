@@ -1,0 +1,22 @@
+{
+    "name": "zinapse/laralocate",
+    "description": "Get information about various locations, countries, states, cities, etc.",
+    "type": "library",
+    "require": {
+        "laravel/framework": "^9.3"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.5"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Zinapse\\Laralocate\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Zinapse"
+        }
+    ]
+}
