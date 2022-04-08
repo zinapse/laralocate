@@ -1,9 +1,13 @@
 {
     "name": "zinapse/laralocate",
-    "description": "Get information about various locations, countries, states, cities, etc.",
     "type": "library",
+    "description": "Get information about various locations, countries, states, cities, etc.",
+    "homepage": "https://github.com/zinapse/laralocate",
     "require": {
-        "laravel/framework": "^9.3"
+        "laravel/framework": "^9.3",
+        "illuminate/support": "^9.7",
+        "franksierra/osm-pbf": "^1.0",
+        "laravel/tinker": "^2.7"
     },
     "require-dev": {
         "mockery/mockery": "^1.5"
@@ -11,12 +15,19 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Zinapse\\Laralocate\\": "src/"
+            "Zinapse\\Laralocate\\": "vendor/zinapse/laralocate/src/"
         }
     },
     "authors": [
         {
             "name": "Zinapse"
         }
-    ]
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Zinapse\\LaraLocate\\ServiceProviders\\LaraLocateServiceProvider"
+            ]
+        }
+    }
 }
