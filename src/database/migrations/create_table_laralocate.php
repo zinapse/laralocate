@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('laralocate', function (Blueprint $table) {
             $table->id();
-            $table->string('laralocate_type');
             $table->string('name');
-            $table->json('data');
+            $table->string('code')->nullable();
+            $table->unsignedBigInteger('laralocate_type');
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->timestamps();
         });
     }

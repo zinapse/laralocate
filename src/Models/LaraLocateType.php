@@ -4,14 +4,14 @@ namespace Zinapse\LaraLocate\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LaraLocate extends Model
+class LaraLocateType extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'laralocate';
+    protected $table = 'laralocate_types';
 
     /**
      * The attributes that are mass assignable.
@@ -19,7 +19,8 @@ class LaraLocate extends Model
      * @var array
      */
     protected $fillable = [
-        'laralocate_type', 'name', 'data'
+        'name'
     ];
-    
+
+    public $timestamps = false;
 }
