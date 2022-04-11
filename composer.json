@@ -6,8 +6,7 @@
     "require": {
         "laravel/framework": "^9.3",
         "illuminate/support": "^9.7",
-        "franksierra/osm-pbf": "^1.0",
-        "laravel/tinker": "^2.7"
+        "franksierra/osm-pbf": "^1.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.5"
@@ -15,7 +14,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Zinapse\\Laralocate\\": "vendor/zinapse/laralocate/src/"
+            "Zinapse\\LaraLocate\\": "src/"
         }
     },
     "authors": [
@@ -26,7 +25,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Zinapse\\LaraLocate\\ServiceProviders\\LaraLocateServiceProvider"
+                "Zinapse\\LaraLocate\\LaraLocateServiceProvider"
             ]
         }
     }
