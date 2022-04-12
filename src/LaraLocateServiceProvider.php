@@ -14,8 +14,15 @@ class LaraLocateServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Load the migrations
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
 
+        // Load the config file
+        $this->publishes([
+            __DIR__ . 'config/laralocate.php' => config_path('laralocate.php')
+        ]);
+
+        // Load the artisan command
         if ($this->app->runningInConsole())
         {
             $this->commands([

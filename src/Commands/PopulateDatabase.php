@@ -13,8 +13,7 @@ class PopulateDatabase extends Command
      *
      * @var string
      */
-    protected $signature = 'laralocate:populate
-                            {--country=* : Include only this country}';
+    protected $signature = 'laralocate:populate';
  
     /**
      * The console command description.
@@ -23,8 +22,11 @@ class PopulateDatabase extends Command
      */
     protected $description = 'Populate the LaraLocate tables';
 
-    protected $file_url = 'https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/54939ff65f80369ba8b78e5277b5ed2ed503ef50/countries%2Bstates%2Bcities.json';
-
+    /**
+     * An array of types to add for LaraLocateTypes.
+     *
+     * @var array
+     */
     protected $object_types = [
         'Country',
         'State',
@@ -53,7 +55,7 @@ class PopulateDatabase extends Command
 
         // Download the JSON file required
         $filepath = tempnam(sys_get_temp_dir(), 'world_info.json') ?: 'world_info.json';
-        if(!copy($this->file_url, $filepath)) {
+        if(!copy(config('laralocate.file_url'), $filepath)) {
             $this->error('Unable to download world data file');
             return;
         }
