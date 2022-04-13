@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "40f383ba9ae890b78d03c0fabdd7a562",
+    "content-hash": "3f42e9b9de93c79499df42f73073e826",
     "packages": [
         {
             "name": "brick/math",
@@ -438,57 +438,6 @@
             "time": "2021-10-11T09:18:27+00:00"
         },
         {
-            "name": "franksierra/osm-pbf",
-            "version": "1.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/franksierra/osm-pbf.git",
-                "reference": "2f1ffd9d7abfea874f3afc7d888ea6600e57430b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/franksierra/osm-pbf/zipball/2f1ffd9d7abfea874f3afc7d888ea6600e57430b",
-                "reference": "2f1ffd9d7abfea874f3afc7d888ea6600e57430b",
-                "shasum": ""
-            },
-            "require": {
-                "ext-zlib": "*",
-                "google/protobuf": "v3.6.1.3",
-                "mdurrant/php-binary-reader": "^1.0",
-                "php": ">=5.6"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "OsmPbf\\": "src/",
-                    "OsmProto\\": "src/OSMProto/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Frank Sierra",
-                    "email": "frank@sierrafayad.com"
-                }
-            ],
-            "description": "Works with Open Street Map .osm.pbf compressed files.",
-            "homepage": "https://github.com/franksierra/osm-pbf",
-            "keywords": [
-                "OpenStreetMap",
-                "open street map",
-                "osm",
-                "pbf"
-            ],
-            "support": {
-                "issues": "https://github.com/franksierra/osm-pbf/issues",
-                "source": "https://github.com/franksierra/osm-pbf"
-            },
-            "time": "2020-08-05T02:35:21+00:00"
-        },
-        {
             "name": "fruitcake/php-cors",
             "version": "v1.2.0",
             "source": {
@@ -560,51 +509,6 @@
             "time": "2022-02-20T15:07:15+00:00"
         },
         {
-            "name": "google/protobuf",
-            "version": "v3.6.1.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "c39346815303f63ad295d6499e11d914c40040e6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/c39346815303f63ad295d6499e11d914c40040e6",
-                "reference": "c39346815303f63ad295d6499e11d914c40040e6",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": ">=4.8.0"
-            },
-            "suggest": {
-                "ext-bcmath": "Need to support JSON deserialization"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Google\\Protobuf\\": "src/Google/Protobuf",
-                    "GPBMetadata\\Google\\Protobuf\\": "src/GPBMetadata/Google/Protobuf"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "proto library for PHP",
-            "homepage": "https://developers.google.com/protocol-buffers/",
-            "keywords": [
-                "proto"
-            ],
-            "support": {
-                "issues": "https://github.com/protocolbuffers/protobuf-php/issues",
-                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.6.1.3"
-            },
-            "time": "2019-02-25T22:48:21+00:00"
-        },
-        {
             "name": "graham-campbell/result-type",
             "version": "v1.0.4",
             "source": {
@@ -668,16 +572,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v9.7.0",
+            "version": "v9.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "54c9696ee3e558ab29317ed6e0cb16bb9db5aad4"
+                "reference": "9f468689964ac80b674a2fe71a56baa7e9e20493"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/54c9696ee3e558ab29317ed6e0cb16bb9db5aad4",
-                "reference": "54c9696ee3e558ab29317ed6e0cb16bb9db5aad4",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/9f468689964ac80b674a2fe71a56baa7e9e20493",
+                "reference": "9f468689964ac80b674a2fe71a56baa7e9e20493",
                 "shasum": ""
             },
             "require": {
@@ -843,7 +747,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2022-04-05T15:07:51+00:00"
+            "time": "2022-04-12T15:43:03+00:00"
         },
         {
             "name": "laravel/serializable-closure",
@@ -1237,58 +1141,6 @@
                 }
             ],
             "time": "2022-04-11T12:49:04+00:00"
-        },
-        {
-            "name": "mdurrant/php-binary-reader",
-            "version": "1.0.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mdurrant/php-binary-reader.git",
-                "reference": "9abf18d7b361d0ae1cd80fc6782e59b313586db6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mdurrant/php-binary-reader/zipball/9abf18d7b361d0ae1cd80fc6782e59b313586db6",
-                "reference": "9abf18d7b361d0ae1cd80fc6782e59b313586db6",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0",
-                "squizlabs/php_codesniffer": "~1.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "PhpBinaryReader\\": [
-                        "src/",
-                        "test/"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Matt Durrant",
-                    "email": "mdurrant@gmail.com"
-                }
-            ],
-            "description": "Lightweight binary reader for PHP",
-            "support": {
-                "issues": "https://github.com/mdurrant/php-binary-reader/issues",
-                "source": "https://github.com/mdurrant/php-binary-reader/tree/master"
-            },
-            "time": "2016-12-08T01:24:19+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -4567,5 +4419,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }

@@ -5,8 +5,7 @@
     "homepage": "https://github.com/zinapse/laralocate",
     "require": {
         "laravel/framework": "^9.3",
-        "illuminate/support": "^9.7",
-        "franksierra/osm-pbf": "^1.0"
+        "illuminate/support": "^9.7"
     },
     "require-dev": {
         "mockery/mockery": "^1.5"
