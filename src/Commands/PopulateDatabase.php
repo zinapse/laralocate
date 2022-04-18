@@ -117,7 +117,7 @@ class PopulateDatabase extends Command
     }
 
     /**
-     * Truncate the tables by calling ::destroy() with an array of IDs.
+     * Truncate the tables by getting chunks of results and deleting the records.
      *
      * @return void
      */
