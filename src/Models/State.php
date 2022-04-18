@@ -19,7 +19,7 @@ class State extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'code', 'parent_id'
+        'name', 'code', 'country_id'
     ];
     
     /**
@@ -39,10 +39,10 @@ class State extends Model
     }
 
     /**
-     * Scope function to help join the tables to find states from a specific country.
+     * Static function to help join the tables to find states from a specific country.
      *
-     * @param Builder $query
      * @param string $country
+     * @return Collection
      */
     public static function fromCountry($country) {
         $country_id = Country::where('name', $country)->pluck('id')->first();
