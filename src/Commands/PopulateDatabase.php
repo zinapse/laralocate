@@ -14,7 +14,8 @@ class PopulateDatabase extends Command
      *
      * @var string
      */
-    protected $signature = 'laralocate:populate';
+    protected $signature = 'laralocate:populate
+                            {--c|cities : Be more verbose when adding cities}';
  
     /**
      * The console command description.
@@ -24,31 +25,24 @@ class PopulateDatabase extends Command
     protected $description = 'Populate the LaraLocate tables';
 
     /**
-     * An array of types to add for LaraLocateTypes.
-     *
-     * @var array
-     */
-    protected $object_types = [
-        'Country',
-        'State',
-        'City'
-    ];
-
-    /**
      * Execute the console command.
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         // Check if we already have data
-        $country = Country::first() ?? null;
-        if(empty($country) && !$this->confirm('LaraLocate data already exists, would you like to continue and overwrite the existing data?', true)) return;
+        $count_country = Country::count();
+        $count_state = State::count();
+        $count_city = City::count();
+        if(($count_country > 0 || $count_state > 0 || $count_city > 0) && 
+            !$this->confirm('LaraLocate data already exists, would you like to continue and overwrite the existing data?', true)) return;
+
+        // Check if we should be verbose with cities
+        $verbose = !empty($this->option('cities'));
 
         // Truncate the existing data
-        City::truncate();
-        State::truncate();
-        Country::truncate();
+        $this->truncateTables();
 
         // Output
         $this->info('Downloading JSON file');
@@ -72,7 +66,7 @@ class PopulateDatabase extends Command
             $new_country->name = $country->name;
             $new_country->code = $country->iso2;
             $new_country->save();
-            $this->info('Added country: ' . $country->name);
+            $this->line('<fg=yellow>Added country: ' . $country->name . '</>');
 
             // Skip countries without states
             if(empty($country->states)) continue;
@@ -84,18 +78,19 @@ class PopulateDatabase extends Command
                 $new_state = new State;
                 $new_state->name = $country->name;
                 $new_state->code = $country->iso2;
-                $new_state->parent_id = $new_country->id;
+                $new_state->country_id = $new_country->id;
                 $new_state->save();
-                $this->info('Added state: ' . $state->name);
+                $this->line('<fg=cyan>Added state: ' . $state->name . '</>');
 
                 // Iterate through the cities
+                if(!$verbose) $this->line('<fg=blue>Adding cities...</>');
                 $cities = $state->cities;
                 foreach($cities as $city) {
                     $new_city = new City;
                     $new_city->name = $city->name;
-                    $new_city->parent_id = $new_state->id;
+                    $new_city->state_id = $new_state->id;
                     $new_city->save();
-                    $this->info('Added city: ' . $city->name);
+                    if($verbose) $this->line('<fg=blue>Added city: ' . $city->name . '</>');
                 }
             }
         }
@@ -109,5 +104,33 @@ class PopulateDatabase extends Command
         $this->info('Finished');
 
         return;
+    }
+
+    /**
+     * Truncate the tables by calling ::destroy() with an array of IDs.
+     *
+     * @return void
+     */
+    protected function truncateTables(): void
+    {
+        // Output
+        $this->info('Truncating old data, this may take some time...');
+
+        // Chunk and delete
+        City::chunkById(5000, function($cities) {
+            foreach($cities as $city) {
+                $city->delete();
+            }
+        });
+        State::chunkById(1000, function($states) {
+            foreach($states as $state) {
+                $state->delete();
+            }
+        });
+        Country::chunkById(1000, function($countries) {
+            foreach($countries as $country) {
+                $country->delete();
+            }
+        });
     }
 }
