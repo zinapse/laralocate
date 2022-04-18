@@ -65,6 +65,8 @@ class PopulateDatabase extends Command
             $new_country = new Country;
             $new_country->name = $country->name;
             $new_country->code = $country->iso2;
+            $new_country->lat = $country->latitude;
+            $new_country->long = $country->longitude;
             $new_country->save();
             $this->line('<fg=yellow>Added country: ' . $country->name . '</>');
 
@@ -79,6 +81,8 @@ class PopulateDatabase extends Command
                 $new_state->name = $state->name;
                 $new_state->code = $state->state_code;
                 $new_state->country_id = $new_country->id;
+                $new_state->lat = $state->latitude;
+                $new_state->long = $state->longitude;
                 $new_state->save();
                 $this->line('<fg=cyan>Added state: ' . $state->name . '</>');
 
@@ -89,6 +93,8 @@ class PopulateDatabase extends Command
                     $new_city = new City;
                     $new_city->name = $city->name;
                     $new_city->state_id = $new_state->id;
+                    $new_city->lat = $city->longitude;
+                    $new_city->long = $city->longitude;
                     $new_city->save();
                     if($verbose) $this->line('<fg=blue>Added city: ' . $city->name . '</>');
                 }
