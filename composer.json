@@ -7,9 +7,6 @@
         "laravel/framework": "^9.3",
         "illuminate/support": "^9.7"
     },
-    "require-dev": {
-        "mockery/mockery": "^1.5"
-    },
     "license": "MIT",
     "autoload": {
         "psr-4": {
