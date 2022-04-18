@@ -76,8 +76,8 @@ class PopulateDatabase extends Command
             foreach($states as $state) {
                 // Add the state record
                 $new_state = new State;
-                $new_state->name = $country->name;
-                $new_state->code = $country->iso2;
+                $new_state->name = $state->name;
+                $new_state->code = $state->state_code;
                 $new_state->country_id = $new_country->id;
                 $new_state->save();
                 $this->line('<fg=cyan>Added state: ' . $state->name . '</>');
