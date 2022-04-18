@@ -26,8 +26,8 @@ return new class extends Migration
         // Add lat and long to each table
         foreach($this->tables as $table) {
             Schema::table('laralocate_' . $table, function (Blueprint $table) {
-                $table->float('lat')->nullable()->before('created_at');
-                $table->float('long')->nullable()->before('created_at');
+                $table->string('lat')->nullable()->before('created_at');
+                $table->string('long')->nullable()->before('created_at');
             });
         }
     }
