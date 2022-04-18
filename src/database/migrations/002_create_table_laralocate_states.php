@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('laralocate_cities', function (Blueprint $table) {
+        Schema::create('laralocate_states', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreign('parent_id')->references('id')->on('laralocate_states');
+            $table->string('code')->nullable();
+            $table->foreignId('country_id')->constrained('laralocate_countries');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('laralocate_cities');
+        Schema::dropIfExists('laralocate_states');
     }
 };
