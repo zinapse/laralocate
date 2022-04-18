@@ -23,11 +23,10 @@ class Country extends Model
     ];
     
     /**
-     * A function that returns all states the country has.
+     * Defining the relationship to states.
      *
-     * @return State
      */
-    public function getStatesAttribute(): State {
-        return State::where('parent_id', $this->id)->get();
+    public function states() {
+        return $this->hasMany(State::class);
     }
 }

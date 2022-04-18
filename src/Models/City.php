@@ -21,6 +21,14 @@ class City extends Model
     protected $fillable = [
         'name', 'code', 'parent_id'
     ];
+
+    /**
+     * Defining the relationship to states.
+     *
+     */
+    public function state() {
+        return $this->belongsTo(State::class);
+    }
     
     /**
      * A function that returns this city's country.
@@ -28,15 +36,6 @@ class City extends Model
      * @return Country
      */
     public function getCountryAttribute(): Country {
-        return Country::find($this->state->parent_id);
-    }
-
-    /**
-     * A function that returns this city's state.
-     *
-     * @return State
-     */
-    public function getStateAttribute(): State {
-        return State::find($this->parent_id);
+        return Country::find($this->state->country_id);
     }
 }

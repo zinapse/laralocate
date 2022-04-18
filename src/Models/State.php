@@ -21,22 +21,31 @@ class State extends Model
     protected $fillable = [
         'name', 'code', 'parent_id'
     ];
-
-    /**
-     * A function that returns the country for this state.
-     *
-     * @return Country
-     */
-    public function getCountryAttribute(): Country {
-        return Country::find($this->parent_id);
-    }
     
     /**
-     * A function that returns all cities this state has.
+     * Defining relationships to cities.
      *
-     * @return City
      */
-    public function getCitiesAttribute(): City {
-        return City::where('parent_id', $this->id)->get();
+    public function cities() {
+        return $this->hasMany(City::class);
+    }
+
+    /**
+     * Defining relationships to countries.
+     *
+     */
+    public function country() {
+        return $this->belongsTo(Country::class);
+    }
+
+    /**
+     * Scope function to help join the tables to find states from a specific country.
+     *
+     * @param Builder $query
+     * @param string $country
+     */
+    public static function fromCountry($country) {
+        $country_id = Country::where('name', $country)->pluck('id')->first();
+        return static::where('country_id', $country_id)->get();
     }
 }
