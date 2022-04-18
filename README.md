@@ -1,2 +1,68 @@
 # zinapse/laralocate
-Get information about various locations, countries, states, cities, etc.
+Get relationships between countries, states, and cities.
+
+## Overview
+This package grabs a JSON file containing data for locations around the world, then parses that data into a database. [That file is here.](https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/54939ff65f80369ba8b78e5277b5ed2ed503ef50/countries%2Bstates%2Bcities.json)
+
+## Installation
+1. Include it with composer:
+`composer require zinapse/laralocate`
+
+2. Make sure you run the migrations: `php artisan migrate`
+
+    - You can see what changes will be made first using **--pretend**: `php artisan migrate --pretend`.
+
+3. After that all you need to do is populate the database: `php artisan laralocate:populate`
+
+## Usage
+There are three models in this package: `City`, `State`, and `Country`.
+
+## City
+| Column Name  | Data |
+| ------------ | ------------- |
+| name         | string        |
+| state_id     | foreign key   |
+
+```php
+<?php
+
+use Zinapse\LaraLocate\Models\City;
+
+$city = City::first();            // Get any City object
+$state = $city->state;            // Get this city's State object
+$country = $city->country;        // Get this city's Country object
+```
+
+## State
+| Column Name  | Data |
+| ------------ | ------------- |
+| name         | string        |
+| code         | string        |
+| country_id   | foreign key   |
+
+```php
+</php
+
+use Zinapse\LaraLocate\Models\State;
+
+// Get all states from the country passed
+$state = State::fromCountry('United States');
+$code = $state->code;             // The state code
+$cities = $state->cities;         // A collection of City objects from this state
+$country = $state->country;       // This state's Country object
+```
+
+## Country
+| Column Name  | Data |
+| ------------ | ------------- |
+| name         | string        |
+| code         | string        |
+
+```php
+</php
+
+use Zinapse\LaraLocate\Models\Country;
+
+$country = Country::where('name', 'United States')->first();
+$states = $country->states;       // Get a collection of this country's State objects
+```
