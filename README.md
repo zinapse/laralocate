@@ -41,7 +41,7 @@ $country = $city->country;        // Get this city's Country object
 | country_id   | foreign key   |
 
 ```php
-</php
+<?php
 
 use Zinapse\LaraLocate\Models\State;
 
@@ -59,7 +59,7 @@ $country = $state->country;       // This state's Country object
 | code         | string        |
 
 ```php
-</php
+<?php
 
 use Zinapse\LaraLocate\Models\Country;
 
