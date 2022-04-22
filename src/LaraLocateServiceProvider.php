@@ -17,6 +17,10 @@ class LaraLocateServiceProvider extends ServiceProvider
         // Load the migrations
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
 
+        $this->publishes([
+            __DIR__ . '/config/laralocate.php' => config_path('laralocate.php')
+        ]);
+
         // Load the artisan command
         if ($this->app->runningInConsole())
         {
@@ -33,6 +37,6 @@ class LaraLocateServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/config/laralocate.php', 'laralocate');
+        // $this->mergeConfigFrom(__DIR__.'/config/laralocate.php', 'laralocate');
     }
 }

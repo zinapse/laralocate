@@ -67,6 +67,9 @@ class PopulateDatabase extends Command
             $new_country->code = $country->iso2;
             $new_country->lat = $country->latitude;
             $new_country->long = $country->longitude;
+            $new_country->phone_code = $country->phone_code;
+            $new_country->currency_name = $country->currency_name;
+            $new_country->currency_symbol = $country->currency_symbol;
             $new_country->save();
             $this->line('<fg=yellow>Added country: ' . $country->name . '</>');
 
