@@ -2,6 +2,7 @@
 
 namespace Zinapse\LaraLocate\Models;
 
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class State extends Model
@@ -44,7 +45,7 @@ class State extends Model
      * @param string $country
      * @return Collection
      */
-    public static function fromCountry($country) {
+    public static function fromCountry(string $country): Collection {
         $country_id = Country::where('name', $country)->pluck('id')->first();
         return static::where('country_id', $country_id)->get();
     }
