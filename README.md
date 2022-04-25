@@ -93,3 +93,19 @@ $code = FeatureCode::where('code', 'A')->first();
 $examples = explode('|', $code->short_desc); // ['country', 'state', 'region]
 
 ```
+
+## GeoNames
+The GeoNames model isn't associated with any tables, but it contains static functions for calling GeoName webhooks.
+
+```php
+<?php
+
+use Zinapse\LaraLocate\Models\GeoNames;
+
+$basic_query = GeoNames::Webhook('Alaska', 2);  // search for 'Alaska' and return only two items
+                                                // this returns an array with GeoName data, so you should check the return before using it
+
+$named_webhook = GeoNames::Webhook(['type' => 'postalCodeSearch', 'postalcode' => 12345]); // runs the postalCodeSearch webhook
+
+$all_webhooks = GeoNames::GetWebhooks(); // returns an array: ['webhook name' => [required variables to pass], ...]
+```
