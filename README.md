@@ -14,10 +14,11 @@ This package grabs a JSON file containing data for locations around the world, t
 
 3. After that all you need to do is populate the database: `php artisan laralocate:populate`
 
-## Usage
-There are three models in this package: `City`, `State`, and `Country`.
+# Models
 
 ## City
+A City object has a name, and a state ID as a parent.
+
 | Column Name  | Data |
 | ------------ | ------------- |
 | name         | string        |
@@ -34,6 +35,8 @@ $country = $city->country;        // Get this city's Country object
 ```
 
 ## State
+A State object has a name, a state code, and a country ID as a parent.
+
 | Column Name  | Data |
 | ------------ | ------------- |
 | name         | string        |
@@ -53,6 +56,8 @@ $country = $state->country;       // This state's Country object
 ```
 
 ## Country
+A Country object has a name and a country code.
+
 | Column Name  | Data |
 | ------------ | ------------- |
 | name         | string        |
@@ -65,4 +70,26 @@ use Zinapse\LaraLocate\Models\Country;
 
 $country = Country::where('name', 'United States')->first();
 $states = $country->states;       // Get a collection of this country's State objects
+
+```
+
+## FeatureCode
+A FeatureCode object has a code, descriptions, and a parent ID. Rows with a null `long_desc` and a null `parent_id` are toplevel codes. Those rows will have
+a `short_desc` that could contain text separated by a `|` character, which are example areas that could be under that code.
+
+| Column Name | Data     |
+| ----------- | -------- |
+| code        | string   |
+| short_desc  | string   |
+| long_desc   | string   |
+| parent_id   | uint     |
+
+```php
+<?php
+
+use Zinapse\LaraLocate\Models\FeatureCode;
+
+$code = FeatureCode::where('code', 'A')->first();
+$examples = explode('|', $code->short_desc); // ['country', 'state', 'region]
+
 ```
