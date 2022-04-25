@@ -74,6 +74,38 @@ class GeoNames extends Model
     }
 
     /**
+     * Helper to run a GeoNames extendedFindNearby request.
+     *
+     * @param integer $lat Latitude
+     * @param integer $lng Longitude
+     * @param integer $max_rows The number of rows to return.
+     * @return array|string
+     */
+    public static function GeoExtendedFindNearby(int $lat = 0, int $lng = 0, int $max_rows = 5): array|string {
+        return GeoNames::Webhook([
+            'type' => 'extendedFindNearby',
+            'lat' => $lat,
+            'lng' => $lng
+        ], $max_rows);
+    }
+
+    /**
+     * Helper to run a GeoNames findNearbyPlaceName request.
+     *
+     * @param integer $lat Longitude
+     * @param integer $lng Longitude
+     * @param integer $max_rows The number of rows to return.
+     * @return array|string
+     */
+    public static function GeoFindNearbyPlaceName(int $lat = 0, int $lng = 0, int $max_rows = 5): array|string {
+        return GeoNames::Webhook([
+            'type' => 'findNearbyPlaceName',
+            'lat' => $lat,
+            'lng' => $lng
+        ], $max_rows);
+    }
+
+    /**
      * Run a GeoNames webhook.
      *
      * @param string|array $data If $data is a string the search webhook will be used with $data as the search parameter.
