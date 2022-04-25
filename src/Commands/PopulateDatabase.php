@@ -79,10 +79,6 @@ class PopulateDatabase extends Command
             // Iterate through the states
             $states = $country->states;
             foreach($states as $state) {
-                // Only get "real" states
-                $real = ($state->type == 'state' || empty($state->type));
-                if(!$real) continue;
-
                 // Add the state record
                 $new_state = new State;
                 $new_state->name = $state->name;
