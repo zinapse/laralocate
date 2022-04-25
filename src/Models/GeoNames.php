@@ -7,17 +7,70 @@ use Illuminate\Database\Eloquent\Model;
 
 class GeoNames extends Model
 {
-    public static function GetWebhooks() {
-        $webhooks = [
-            'search' => ['q'],
-            'postalCodeSearch' => ['postalcode'],
-            'findNearbyPostalCodes' => ['lat', 'lng'],
-            'countrySubdivision' => ['lat', 'lng'],
-            'extendedFindNearby' => ['lat', 'lng'],
-            'findNearbyPlaceName' => ['lat', 'lng'],
-        ];
-        
-        return $webhooks;
+    /**
+     * Lists all available webhooks. On error returns a string with the error message.
+     *
+     * @return array|string
+     */
+    public static function GetWebhooks(): array|string {
+        return GeoNames::Webhook(listhooks: true);
+    }
+
+    /**
+     * Helper to run a Geo search request.
+     *
+     * @param string $query The string to query for.
+     * @param int $max_rows The number of rows to return.
+     * @return array|string
+     */
+    public static function GeoSearch(string $query = '', int $max_rows = 5): array|string {
+        return GeoNames::Webhook($query, $max_rows);
+    }
+
+    /**
+     * Helper to run a GeoNames postalCodeSearch request.
+     *
+     * @param string $postalcode The postal code to search for.
+     * @param int $max_rows The number of rows to return.
+     * @return array|string
+     */
+    public static function GeoPostalCodeSearch(string $postalcode = '', int $max_rows = 5): array|string {
+        return GeoNames::Webhook([
+            'type' => 'postalCodeSearch',
+            'postalcode' => $postalcode
+        ], $max_rows);
+    }
+
+    /**
+     * Helper to run a GeoNames findNearbyPostalCodes request.
+     *
+     * @param integer $lat Latitude
+     * @param integer $lng Longitude
+     * @param integer $max_rows The number of rows to return.
+     * @return array|string
+     */
+    public static function GeoFindNearbyPostalCodes(int $lat = 0, int $lng = 0, int $max_rows = 5): array|string {
+        return GeoNames::Webhook([
+            'type' => 'findNearbyPostalCodes',
+            'lat' => $lat,
+            'lng' => $lng
+        ], $max_rows);
+    }
+
+    /**
+     * Helper to run a GeoNames countrySubdivision request.
+     *
+     * @param integer $lat Latitude
+     * @param integer $lng Longitude
+     * @param integer $max_rows The number of rows to return.
+     * @return array|string
+     */
+    public static function GeoCountrySubdivision(int $lat = 0, int $lng = 0, int $max_rows = 5): array|string {
+        return GeoNames::Webhook([
+            'type' => 'countrySubdivision',
+            'lat' => $lat,
+            'lng' => $lng
+        ], $max_rows);
     }
 
     /**
