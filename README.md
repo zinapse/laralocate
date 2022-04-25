@@ -102,10 +102,15 @@ The GeoNames model isn't associated with any tables, but it contains static func
 
 use Zinapse\LaraLocate\Models\GeoNames;
 
+$all_webhooks = GeoNames::GetWebhooks(); // returns an array: ['webhook name' => [required variables to pass], ...]
+
 $basic_query = GeoNames::Webhook('Alaska', 2);  // search for 'Alaska' and return only two items
                                                 // this returns an array with GeoName data, so you should check the return before using it
+                                                // this works by using the first parameter as the query if it's a string
 
 $named_webhook = GeoNames::Webhook(['type' => 'postalCodeSearch', 'postalcode' => 12345]); // runs the postalCodeSearch webhook
 
-$all_webhooks = GeoNames::GetWebhooks(); // returns an array: ['webhook name' => [required variables to pass], ...]
+// Added helper functions so you don't have to remember all this, or pass arrays, etc
+$search = GeoNames::GeoSearch('Alaska', 2); // this is the same as $basic_query
+                                            // see GeoNames.php
 ```
