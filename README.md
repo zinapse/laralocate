@@ -14,6 +14,9 @@ This package grabs a JSON file containing data for locations around the world, t
 
 3. After that all you need to do is populate the database: `php artisan laralocate:populate`
 
+    - You can use the `--cities` option to see verbose city output.
+    - If you don't want the command to download the JSON file automatically, you can specify your own JSON file's path: `php artisan laralocate:populate --file=/my/path/to/file.json`
+
 # Models
 
 ## City
