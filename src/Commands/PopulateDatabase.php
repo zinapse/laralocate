@@ -75,8 +75,16 @@ class PopulateDatabase extends Command
         // Output
         $this->info('Parsing JSON');
 
-        // Parse the countries
+        // JSON to an array
         $json = json_decode(file_get_contents($filepath));
+
+        // If there's no data
+        if(empty($json)) {
+            $this->error('No JSON data found');
+            return;
+        }
+
+        // Parse the array
         foreach($json as $country) {
             // Add the country record
             $new_country = new Country;
