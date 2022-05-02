@@ -15,7 +15,8 @@ class PopulateDatabase extends Command
      * @var string
      */
     protected $signature = 'laralocate:populate
-                            {--c|cities : Be more verbose when adding cities}';
+                            {--c|cities : Be more verbose when adding cities}
+                            {--f|file= : Path to a file to use instead of downloading one}';
  
     /**
      * The console command description.
@@ -44,15 +45,31 @@ class PopulateDatabase extends Command
         // Truncate the existing data
         $this->truncateTables();
 
-        // Output
-        $this->info('Downloading JSON file');
+        // The file set as an option
+        $option_file = $this->option('file') ?? '';
 
-        // Download the JSON file required
-        $file_url = config('laralocate.file_url');
-        $filepath = tempnam(sys_get_temp_dir(), 'world_info.json') ?: 'world_info.json';
-        if(!copy($file_url, $filepath)) {
-            $this->error('Unable to download world data file from: ' . $file_url);
-            return;
+        // If we have an option
+        if(!empty($option_file) && file_exists($option_file)) {
+            // If we have a file to use
+            $filepath = $this->option('file');
+        } else {
+            // If the file was passed but not found
+            if(!empty($option_file)) {
+                $this->warn('File "' . $option_file . '" not found, falling back to download URL');
+            }
+
+            // Output
+            $this->info('Downloading JSON file...');
+    
+            // Download the JSON file required
+            $file_url = config('laralocate.file_url');
+            $filepath = tempnam(sys_get_temp_dir(), 'world_info.json') ?: 'world_info.json';
+            
+            // If we couldn't download the file
+            if(!copy($file_url, $filepath)) {
+                $this->error('Unable to download world data file from: ' . $file_url);
+                return;
+            }
         }
 
         // Output
