@@ -40,13 +40,13 @@ class City extends Model
     }
 
     /**
-     * A function that returns zipcodes and related data
+     * A function that returns postal codes and related data
      * within $radius of this city's latitude and longitude.
      *
      * @param integer $radius The radius to search (in disance unit type defined in the config)
      * @return array
      */
-    public function getZipcodes(int $radius = 5): array {
-        return Zipcode::ZipcodesNearCity($this, $radius);
+    public function getPostalCodes(int $radius = 5): array {
+        return PostalCode::NearCity($this, $radius);
     }
 }

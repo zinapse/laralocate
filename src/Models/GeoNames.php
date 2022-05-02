@@ -8,12 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class GeoNames extends Model
 {
     /**
-     * Lists all available webhooks. On error returns a string with the error message.
+     * Lists all available webhooks.
      *
-     * @return array|string
+     * @return array
      */
     public static function GetWebhooks(): array|string {
-        return GeoNames::Webhook(listhooks: true);
+        // Avaliable webhooks
+        $webhooks = [
+            'search' => ['q'],
+            'postalCodeSearch' => ['postalcode'],
+            'findNearbyPostalCodes' => ['lat', 'lng', 'radius'],
+            'countrySubdivision' => ['lat', 'lng'],
+            'extendedFindNearby' => ['lat', 'lng'],
+            'findNearbyPlaceName' => ['lat', 'lng'],
+        ];
+        return $webhooks;
     }
 
     /**
@@ -24,7 +33,10 @@ class GeoNames extends Model
      * @return array|string
      */
     public static function GeoSearch(string $query = '', int $max_rows = 5): array|string {
-        return GeoNames::Webhook($query, $max_rows);
+        return GeoNames::Webhook([
+            'type' => 'search',
+            'q' => $query
+        ], $max_rows);
     }
 
     /**
@@ -44,13 +56,13 @@ class GeoNames extends Model
     /**
      * Helper to run a GeoNames findNearbyPostalCodes request.
      *
-     * @param integer $lat Latitude
-     * @param integer $lng Longitude
+     * @param float $lat Latitude
+     * @param float $lng Longitude
      * @param integer $radius The radius to search
      * @param integer $max_rows The number of rows to return.
      * @return array|string
      */
-    public static function GeoFindNearbyPostalCodes(int $lat = 0, int $lng = 0, int $radius = 5, int $max_rows = 5): array|string {
+    public static function GeoFindNearbyPostalCodes(float $lat = 0, float $lng = 0, int $radius = 5, int $max_rows = 5): array|string {
         $response = GeoNames::Webhook([
             'type' => 'findNearbyPostalCodes',
             'lat' => $lat,
@@ -112,25 +124,19 @@ class GeoNames extends Model
     /**
      * Run a GeoNames webhook.
      *
-     * @param string|array $data If $data is a string the search webhook will be used with $data as the search parameter.
-     *                           If $data is an array, the 'type' key must be set to a valid webhook.
+     * @param array $data        An array with data passed to the request. 
+     *                           Format: ['type' => 'WEBHOOK', 'PARAM' => 'VALUE']
+     *                           Example: ['type' => 'search', 'q' => 'New York']
+     *                           You can pass as many parameters in the array as you like.
      *                           @link https://www.geonames.org/export/ws-overview.html
      * @param integer $max_rows  The max number of elements to return.
      * @param bool $listhooks    If this is true, this function will return the webhooks and their required variables to pass with $data.
-     * @return string|array      If the return is a string, it's an error string. If the return is an array, it will be
+     * @return string|array      If the return is a string, it's an error message. If the return is an array, it will be
      *                           the results or an empty array.
      */
-    public static function Webhook(string|array $data = null, int $max_rows = 5, bool $listhooks = false): string|array {
-        // Avaliable webhooks
-        $webhooks = [
-            'search' => ['q'],
-            'postalCodeSearch' => ['postalcode'],
-            'findNearbyPostalCodes' => ['lat', 'lng'],
-            'countrySubdivision' => ['lat', 'lng'],
-            'extendedFindNearby' => ['lat', 'lng'],
-            'findNearbyPlaceName' => ['lat', 'lng'],
-        ];
-        if($listhooks) return $webhooks;
+    public static function Webhook(array $data = null, int $max_rows = 5): string|array {
+        // Get the webhooks
+        $webhooks = GeoNames::GetWebhooks();
 
         /**
          * Get the GeoNames username from the config, if one exists.
@@ -140,66 +146,52 @@ class GeoNames extends Model
         $username = config('laralocate.geonames_username');
 
         // If one isn't found return an error
-        if(empty($username)) {
-            return 'No GeoNames username provided in laraconfig.php';
-        }
+        if(empty($username)) return 'No GeoNames username provided in laraconfig.php';
 
         // The base GeoNames URL
         $base_url = 'http://api.geonames.org/';
-
-        // If $data is an array then we're doing more complex requests
-        if(is_array($data)) {
-            // Get the request type, return an error if none was passed
-            $type = $data['type'] ?? null;
-            if(empty($type)) return 'Please pass a webhook type in the $data array | webhooks: ' . print_r(array_keys($webhooks));
-
-            // Make sure the type is valid
-            $webhook = $webhooks[$type] ?? null;
-            if(empty($webhook)) return $type . ' is an invalid webhook';
-
             
-            // Build the request and make sure we have the variables needed
-            $request = $base_url . $type . '?';
-            foreach($webhook as $hookname => $required) {
-                foreach((array)$required as $variable) {
-                    $var = $data[$variable] ?? null;
+        // Get the request type, return an error if none was passed
+        $type = $data['type'] ?? null;
+        if(empty($type)) return 'Please pass a webhook type in the $data array | webhooks: ' . print_r(array_keys($webhooks));
 
-                    // Format miles to kilometers if specified
-                    if(config('laralocate.distance_unit_type') === 'mi') $var = (int)$var * 1.609344;
+        // Make sure the type is valid
+        $webhook = $webhooks[$type] ?? null;
+        if(empty($webhook)) return $type . ' is an invalid webhook';
+        
+        // Build the request and make sure we have the variables needed
+        $request = $base_url . $type . '?';
+        foreach($webhook as $required) {
+            foreach((array)$required as $key) {
+                $var = $data[$key] ?? null;
 
-                    // If the variables is empty
-                    if(empty($var)) return 'Missing required variable: ' . $required;
+                // If the variable is empty
+                if(empty($var)) return 'Missing required variable: ' . $required;
 
-                    // Append the request URI
-                    $request .= $required . '=' . $var . '&';
+                // Format miles to kilometers if specified
+                if($key == 'radius' && !empty($var)) {
+                    if(config('laralocate.distance_unit_type') === 'mi') {
+                        $var = (float)$var * 1.609344;
+                    }
                 }
+
+                // Append the request URI
+                $request .= $required . '=' . $var . '&';
             }
-
-            // Append the max rows and username to the request
-            $request .= 'maxRows=' . $max_rows . '&username=' . $username;
-
-            // Send the Guzzle HTTP request
-            $client = new Client();
-            $res = $client->request('GET', $request);
-
-            // Convert the XML to an array and return it
-            $xml = simplexml_load_string($res->getBody(), 'SimpleXMLElement', LIBXML_NOCDATA);
-            $json = json_encode($xml);
-            $out = json_decode($json, true);
-        } else {
-            // Build the request
-            $request = $base_url . 'search?q=' . $data . '&maxRows=' . $max_rows . '&username=' . $username;
-
-            // Send the Guzzle HTTP request
-            $client = new Client();
-            $res = $client->request('GET', $request);
-
-            // Convert the XML to an array and return it
-            $xml = simplexml_load_string($res->getBody(), 'SimpleXMLElement', LIBXML_NOCDATA);
-            $json = json_encode($xml);
-            $out = json_decode($json, true);
         }
 
-        return $out ?? [];
+        // Append the max rows and username to the request
+        $request .= 'maxRows=' . $max_rows . '&username=' . $username;
+
+        // Send the Guzzle HTTP request
+        $client = new Client();
+        $res = $client->request('GET', $request);
+
+        // Convert the XML to an array and return it
+        $xml = simplexml_load_string($res->getBody(), 'SimpleXMLElement', LIBXML_NOCDATA);
+        $json = json_encode($xml);
+        $out = json_decode($json, true);
+
+        return $out;
     }
 }
