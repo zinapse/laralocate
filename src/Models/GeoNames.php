@@ -46,14 +46,16 @@ class GeoNames extends Model
      *
      * @param integer $lat Latitude
      * @param integer $lng Longitude
+     * @param integer $radius The radius to search
      * @param integer $max_rows The number of rows to return.
      * @return array|string
      */
-    public static function GeoFindNearbyPostalCodes(int $lat = 0, int $lng = 0, int $max_rows = 5): array|string {
+    public static function GeoFindNearbyPostalCodes(int $lat = 0, int $lng = 0, int $radius = 5, int $max_rows = 5): array|string {
         return GeoNames::Webhook([
             'type' => 'findNearbyPostalCodes',
             'lat' => $lat,
-            'lng' => $lng
+            'lng' => $lng,
+            'radius' => $radius,
         ], $max_rows);
     }
 
@@ -159,9 +161,14 @@ class GeoNames extends Model
             foreach($webhook as $hookname => $required) {
                 foreach((array)$required as $variable) {
                     $var = $data[$variable] ?? null;
-                    if(empty($var)) {
-                        return 'Missing required variable: ' . $required;
-                    }
+
+                    // Format miles to kilometers if specified
+                    if(config('laralocate.distance_unit_type') === 'mi') $var = (int)$var * 1.609344;
+
+                    // If the variables is empty
+                    if(empty($var)) return 'Missing required variable: ' . $required;
+
+                    // Append the request URI
                     $request .= $required . '=' . $var . '&';
                 }
             }
