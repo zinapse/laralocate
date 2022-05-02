@@ -51,12 +51,14 @@ class GeoNames extends Model
      * @return array|string
      */
     public static function GeoFindNearbyPostalCodes(int $lat = 0, int $lng = 0, int $radius = 5, int $max_rows = 5): array|string {
-        return GeoNames::Webhook([
+        $response = GeoNames::Webhook([
             'type' => 'findNearbyPostalCodes',
             'lat' => $lat,
             'lng' => $lng,
             'radius' => $radius,
         ], $max_rows);
+
+        return $response['code'] ?? 'Invalid response in GeoFindNearbyPostalCodes';
     }
 
     /**
