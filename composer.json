@@ -4,6 +4,7 @@
     "description": "Get information about various locations, countries, states, cities, etc.",
     "homepage": "https://github.com/zinapse/laralocate",
     "require": {
+        "php": ">=8.0",
         "laravel/framework": "^9.3",
         "illuminate/support": "^9.7",
         "guzzlehttp/guzzle": "^7.4"
