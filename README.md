@@ -15,7 +15,7 @@ This package grabs a JSON file containing data for locations around the world, t
 3. After that all you need to do is populate the database: `php artisan laralocate:populate`
 
     - You can use the `--cities` option to see verbose city output.
-    - If you don't want the command to download the JSON file automatically, you can specify your own JSON file's path: `php artisan laralocate:populate --file=/my/path/to/file.json`
+    - If you don't want the command to download the JSON file automatically, you can specify your own JSON file's path: `php artisan laralocate:populate --file=/my/path/to/file.json` (just make sure it follows the same structure)
 
 # Models
 
@@ -35,6 +35,8 @@ use Zinapse\LaraLocate\Models\City;
 $city = City::first();            // Get any City object
 $state = $city->state;            // Get this city's State object
 $country = $city->country;        // Get this city's Country object
+
+$zipcodes = $city->getPostalCodes(6); // ['type' => 'findNearbyPostalCodes', 'lat' => $city->lat, 'lng' => $city->long, 'radius' => 6, 'maxRows' => 5]
 ```
 
 ## State
@@ -107,13 +109,8 @@ use Zinapse\LaraLocate\Models\GeoNames;
 
 $all_webhooks = GeoNames::GetWebhooks(); // returns an array: ['webhook name' => [required variables to pass], ...]
 
-$basic_query = GeoNames::Webhook('Alaska', 2);  // search for 'Alaska' and return only two items
-                                                // this returns an array with GeoName data, so you should check the return before using it
-                                                // this works by using the first parameter as the query if it's a string
-
 $named_webhook = GeoNames::Webhook(['type' => 'postalCodeSearch', 'postalcode' => 12345]); // runs the postalCodeSearch webhook
 
 // Added helper functions so you don't have to remember all this, or pass arrays, etc
-$search = GeoNames::GeoSearch('Alaska', 2); // this is the same as $basic_query
-                                            // see GeoNames.php
+$search = GeoNames::GeoSearch('Alaska', 2); // ['type' => 'search', 'q' => 'Alaska', 'maxRows' => 2]
 ```
