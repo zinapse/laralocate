@@ -3,9 +3,10 @@
 namespace Zinapse\LaraLocate\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Zinapse\LaraLocate\Models\City;
-use Zinapse\LaraLocate\Models\Country;
 use Zinapse\LaraLocate\Models\State;
+use Zinapse\LaraLocate\Models\Country;
 
 class PopulateDatabase extends Command
 {
@@ -65,11 +66,33 @@ class PopulateDatabase extends Command
             $file_url = config('laralocate.file_url');
             $filepath = tempnam(sys_get_temp_dir(), 'world_info.json') ?: 'world_info.json';
             
-            // If we couldn't download the file
-            if(!copy($file_url, $filepath)) {
-                $this->error('Unable to download world data file from: ' . $file_url);
-                return;
+            // cURL and file variables
+            $ch = curl_init();
+            $fp = fopen($filepath, 'w');
+
+            // Setting cURL options
+            curl_setopt($ch, CURLOPT_URL, $file_url);
+            curl_setopt($ch, CURLOPT_FILE, $fp);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            
+            // Get the data
+            $data = curl_exec($ch);
+
+            if(curl_error($ch)) {
+                // Log any errors
+                Log::error(curl_error($ch));
+            } else {
+                // Write to the file
+                fwrite($fp, $data);
             }
+
+            // Free the cURL object
+            curl_close($ch);
+
+            // if(!copy($file_url, $filepath)) {
+            //     $this->error('Unable to download world data file from: ' . $file_url);
+            //     return;
+            // }
         }
 
         // Output
