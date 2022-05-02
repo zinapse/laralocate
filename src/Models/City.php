@@ -38,4 +38,15 @@ class City extends Model
     public function getCountryAttribute(): Country {
         return Country::find($this->state->country_id);
     }
+
+    /**
+     * A function that returns zipcodes and related data
+     * within $radius of this city's latitude and longitude.
+     *
+     * @param integer $radius The radius to search (in disance unit type defined in the config)
+     * @return array
+     */
+    public function getZipcodes(int $radius = 5): array {
+        return Zipcode::ZipcodesNearCity($this, $radius);
+    }
 }
